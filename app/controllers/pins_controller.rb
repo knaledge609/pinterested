@@ -3,9 +3,12 @@
   before_action :correct_user, only: [:edit, :update, :destroy]
   before_action :authenticate_user!, except: [:index, :show]
 
-  def index
-    @pins = Pin.all.order("created_at DESC")
-  end
+
+ def index
+  @pins = Pin.all.order("created_at DESC").paginate(:page => params[:page], :per_page => 3)
+ end
+end
+
 
   def show
   end
@@ -26,7 +29,7 @@
     end
   end
 
-  def update
+    def update
     if @pin.update(pin_params)
       redirect_to @pin, notice: 'Pin was successfully updated.'
     else
@@ -54,4 +57,3 @@
     def pin_params
       params.require(:pin).permit(:description, :image)
     end
-end
